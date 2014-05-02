@@ -24,6 +24,32 @@ module Gauntlet
       # Source: Codewars
 
       def self.calc(expression)
+        return 0 if expression == ""
+        stack = Array.new
+        equation = expression.split(" ")
+        for i in (0...equation.length)
+          case equation[i]
+          when "+"
+            a = stack.pop()
+            b = stack.pop()
+            stack.push(b + a)
+          when "-"
+            a = stack.pop()
+            b = stack.pop()
+            stack.push(b - a)
+          when "/"
+            a = stack.pop()
+            b = stack.pop()
+            stack.push(b / a)
+          when "*"
+            a = stack.pop()
+            b = stack.pop()
+            stack.push(b * a)
+          else
+            stack.push(equation[i].to_f)
+          end
+        end
+        stack.pop()
       end
 
     end
