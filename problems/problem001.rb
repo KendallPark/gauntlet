@@ -28,7 +28,7 @@ module Gauntlet
         stack = Array.new
         equation = expression.split(" ")
         equation.each do |unit|
-          if ["+", "-", "*", "/"].include? unit
+          if ["+", "-", "*", "/", "**"].include? unit
             b = stack.pop
             a = stack.pop
             stack.push(do_equation(a, b, unit))
