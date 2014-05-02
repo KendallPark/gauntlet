@@ -27,13 +27,13 @@ module Gauntlet
         return 0 if expression == ""
         stack = Array.new
         equation = expression.split(" ")
-        for i in (0...equation.length)
-          if ["+", "-", "*", "/"].include? equation[i]
+        equation.each do |unit|
+          if ["+", "-", "*", "/"].include? unit
             b = stack.pop()
             a = stack.pop()
-            stack.push(do_equation(a, b, equation[i]))
+            stack.push(do_equation(a, b, unit))
           else
-            stack.push(equation[i].to_f)
+            stack.push(unit.to_f)
           end
         end
         stack.pop()
