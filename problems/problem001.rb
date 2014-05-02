@@ -29,14 +29,14 @@ module Gauntlet
         equation = expression.split(" ")
         equation.each do |unit|
           if ["+", "-", "*", "/"].include? unit
-            b = stack.pop()
-            a = stack.pop()
+            b = stack.pop
+            a = stack.pop
             stack.push(do_equation(a, b, unit))
           else
             stack.push(unit.to_f)
           end
         end
-        stack.pop()
+        stack.pop
       end
 
       def self.do_equation(a, b, operator)
