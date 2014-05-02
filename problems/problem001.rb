@@ -28,28 +28,19 @@ module Gauntlet
         stack = Array.new
         equation = expression.split(" ")
         for i in (0...equation.length)
-          case equation[i]
-          when "+"
-            a = stack.pop()
+          if ["+", "-", "*", "/"].include? equation[i]
             b = stack.pop()
-            stack.push(b + a)
-          when "-"
             a = stack.pop()
-            b = stack.pop()
-            stack.push(b - a)
-          when "/"
-            a = stack.pop()
-            b = stack.pop()
-            stack.push(b / a)
-          when "*"
-            a = stack.pop()
-            b = stack.pop()
-            stack.push(b * a)
+            stack.push(do_equation(a, b, equation[i]))
           else
             stack.push(equation[i].to_f)
           end
         end
         stack.pop()
+      end
+
+      def self.do_equation(a, b, operator)
+        a.send(operator, b)
       end
 
     end
