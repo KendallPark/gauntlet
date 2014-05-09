@@ -53,48 +53,41 @@ module Gauntlet
       end
 
       def encode(text)
-        output = ""
-        for i in (0...text.length)
-          unless alphabet.member? text[i].downcase 
-            output << text[i]
-          else
-            output << shift(text[i].downcase, get_key(i))
-          end
-        end
-        output
+        cypher_text(text, "shift_forward")
       end
 
       def decode(text)
+        cypher_text(text, "shift_back")
+      end
+
+      def cypher_text(text, direction)
         output = ""
         for i in (0...text.length)
-          unless alphabet.member? text[i].downcase
-            output << text[i]
+          char = text[i]
+          unless alphabet.member? char.downcase 
+            output << char
           else
-            output << shift_back(text[i].downcase, get_key(i))
+            output << send(direction, char.downcase, keyphrase_char_at(i))
           end
         end
         output
       end
 
-      def shift(char, key_char)
+      def shift_forward(char, key_char)
         diff = key_char.ord - alphabet[0].ord
         new_char = char.ord + diff
-        if new_char > alphabet.last.ord
-          new_char -= alphabet.length
-        end
+        new_char -= alphabet.length if new_char > alphabet.last.ord
         new_char.chr
       end
 
       def shift_back(char, key_char)
         diff = key_char.ord - alphabet[0].ord
         new_char = char.ord - diff
-        if new_char < alphabet.first.ord
-          new_char += alphabet.length
-        end
+        new_char += alphabet.length if new_char < alphabet.first.ord
         new_char.chr
       end
 
-      def get_key(index)
+      def keyphrase_char_at(index)
         keyphrase[index % keyphrase.length]
       end
 
