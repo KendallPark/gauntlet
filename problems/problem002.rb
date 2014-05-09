@@ -42,6 +42,8 @@ module Gauntlet
       # For simplicity's sake, you can assume no keyphrase will have
       # non-alphabetic characters.
 
+      # 97 - 122 lowercase
+
       attr_reader :keyphrase, :alphabet
 
       def initialize(keyphrase, alphabet=nil)
@@ -51,9 +53,49 @@ module Gauntlet
       end
 
       def encode(text)
+        output = ""
+        for i in (0...text.length)
+          unless alphabet.member? text[i].downcase 
+            output << text[i]
+          else
+            output << shift(text[i].downcase, get_key(i))
+          end
+        end
+        output
       end
 
       def decode(text)
+        output = ""
+        for i in (0...text.length)
+          unless alphabet.member? text[i].downcase
+            output << text[i]
+          else
+            output << shift_back(text[i].downcase, get_key(i))
+          end
+        end
+        output
+      end
+
+      def shift(char, key_char)
+        diff = key_char.ord - alphabet[0].ord
+        new_char = char.ord + diff
+        if new_char > alphabet.last.ord
+          new_char -= alphabet.length
+        end
+        new_char.chr
+      end
+
+      def shift_back(char, key_char)
+        diff = key_char.ord - alphabet[0].ord
+        new_char = char.ord - diff
+        if new_char < alphabet.first.ord
+          new_char += alphabet.length
+        end
+        new_char.chr
+      end
+
+      def get_key(index)
+        keyphrase[index % keyphrase.length]
       end
 
     end
